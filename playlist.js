@@ -25,6 +25,7 @@ var initSongs = [
 ];
 var songs = initSongs.map(song => ({ ...song }));
 function loadSong() {
+    if (currentIndex < 0) return;
     var song = songs[currentIndex];
     audio.src = song.src;
     songTitle.textContent = song.title;
@@ -55,7 +56,7 @@ function formatTime(seconds) {
 
 
 playBtn.addEventListener("click", function () {
-    if (audio.scr == null) return;
+    if (currentIndex < 0) return;
     if (audio.paused) {
         audio.play();
     } else {
@@ -138,7 +139,7 @@ function renderPlaylist() {
             e.stopPropagation();
 
             songs.splice(index, 1);
-
+            console.log(songs)
             if (index === currentIndex) {
                 currentIndex = Math.min(currentIndex, songs.length - 1);
                 loadSong();
@@ -149,6 +150,7 @@ function renderPlaylist() {
                     currentIndex = -1;
                     audio.src = "";
                     songTitle.textContent = "";
+                    updatePlayBtn();
                 }
             } else if (index < currentIndex) {
                 currentIndex--;
@@ -241,14 +243,17 @@ resetBth.addEventListener("click", () => {
     currentIndex = -1;
     audio.src = "";
     songTitle.textContent = "";
+    updatePlayBtn();
     renderPlaylist();
     renderSonglist();
 });
 
 addAll.addEventListener("click", () => {
-    const currentSong = songs[currentIndex];
+    const currentSong = songs[currentIndex];   
     songs = initSongs.map(song => ({ ...song }));
-    findIndex(currentSong);
+    if (currentIndex >= 0) {
+        findIndex(currentSong);
+    }
     renderPlaylist();
     renderSonglist();
     highlightActive(currentIndex);
