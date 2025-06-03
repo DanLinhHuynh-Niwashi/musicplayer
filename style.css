@@ -201,6 +201,14 @@ body.dark-mode .right-panel::-webkit-scrollbar-thumb {
     font-size: 0.9rem;
 }
 
+.timer-select-box:disabled {
+    width: 60px;
+    padding: 0.25rem 0.35rem;
+    font-size: 0.9rem;
+    background-color: gray;
+    color: white;
+}
+
 .timer-select span {
     font-weight: 600;
     font-size: 1.2rem;
