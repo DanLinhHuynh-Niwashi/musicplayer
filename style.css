@@ -1,0 +1,208 @@
+:root {
+    /* Light mode */
+    --main-color: #8758ff;
+    --secondary-color: rgb(255, 145, 196);
+
+    --bg-color: #f8f9fa;
+    --card-bg-color: #ffffff;
+    --text-color: #000000;
+
+    --slider-bg: #ebe9e7;
+}
+
+body.dark-mode {
+    /* Dark mode colors */
+    --main-color: rgb(195, 0, 255);
+    --secondary-color: rgb(255, 0, 212);
+
+    --bg-color: #121212;
+    --card-bg-color: #1e1e1e;
+    --text-color: #f0f0f0;
+
+    --slider-bg: #2c2c2c;
+}
+
+body,
+html {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+audio {
+    display: none;
+}
+
+.app-wrapper {
+    display: flex;
+    gap: 20px;
+}
+
+.left-panel {
+    flex: 7;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+}
+
+.right-panel {
+    flex: 3;
+    max-height: 700px;
+    overflow-y: auto;
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+}
+
+#visualizer {
+    background-color: #000;
+    border-radius: 8px;
+    margin-top: 1rem;
+    height: 300px;
+    width: 100%;
+}
+
+.playlist-list {
+    max-height: 215px;
+    overflow-y: auto;
+}
+
+.list-group-item {
+    background-color: var(--bg-color);
+    border-color: var(--main-color);
+    color: var(--text-color);
+}
+
+.list-group-item.active {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+    color: white;
+}
+
+select.form-select {
+    max-width: 250px;
+    border-color: var(--main-color);
+    color: var(--text-color);
+    background-color: var(--card-bg-color);
+}
+
+select.form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 5px var(--secondary-color);
+}
+
+/* Buttons */
+button.btn-primary {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+button.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+button.btn-secondary {
+    border-color: var(--main-color);
+    color: white;
+}
+
+button.btn-secondary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+    color: white;
+
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    color: var(--main-color);
+    border-color: var(--main-color);
+    background-color: transparent;
+
+    box-shadow: none;
+}
+
+.btn-outline-primary:active {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+}
+
+button.btn:disabled {
+    background-color: gray !important;
+    border-color:  gray !important;
+    color: white;
+    cursor: not-allowed;
+}
+
+/* Slider */
+.slider {
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--slider-bg);
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--main-color);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--main-color);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-control {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+}
+
+/* Scrollbar cho playlist*/
+body.dark-mode .right-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+body.dark-mode .right-panel::-webkit-scrollbar-thumb {
+    background-color: var(--main-color);
+    border-radius: 4px;
+}
+
+.timer-select {
+    flex-wrap: nowrap;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.timer-select-box {
+    width: 60px;
+    padding: 0.25rem 0.35rem;
+    font-size: 0.9rem;
+}
+
+.timer-select span {
+    font-weight: 600;
+    font-size: 1.2rem;
+    user-select: none;
+}
