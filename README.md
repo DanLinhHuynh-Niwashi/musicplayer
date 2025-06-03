@@ -9,7 +9,7 @@
 ### Submission
 
 * **GitHub Repository**: [musicplayer](https://github.com/DanLinhHuynh-Niwashi/musicplayer)
-* **Demo**: [Demo video](#)
+* **Demo**: [Demo video](https://youtu.be/SO0PCxF6g4M)
 * **Acknowledgement**: The project utilized ChatGPT to support code cleaning, documentation, and UI enhancements.
 
 ## Table of Contents
@@ -37,7 +37,7 @@ The **Music Player** is a browser-based web application that allows users to pla
 
 | **Feature**         | **Description**                                                          |
 | ------------------- | ------------------------------------------------------------------------ |
-| Audio Playback      | Play, pause, skip forward/back, and control playback via a media player. |
+| Audio Playback      | Play, pause, skip forward/back, and control playback via a media player. The player will switch to the next song upon ending the current song.|
 | Volume Control      | Real-time slider for controlling audio volume.                           |
 | Playlist Management | Add, reorder (drag-and-drop/shuffle), or remove songs from the playlist.         |
 | Audio Visualization (*) | Visual modes: Spectrum, Radial, Oscilloscope, Radial-Oscilloscope.       |
@@ -51,10 +51,11 @@ The **Music Player** is a browser-based web application that allows users to pla
 > * Ensure all media files used are in supported formats (e.g., `.mp3`, `.wav`).
 > * All user interaction is performed directly on the UI (no backend or server required).
 > * For custom visualizations, modify `visualizer.js`.
+> * For custom song list, modify `initSongs` in `playlist.js`, ensure your sources are unique and are supported.
 
 1. Clone or download the repository.
 2. Open `index.html` in your browser.
-3. An initial playlist will be created with all the songs in the storage, you can modify the playlist.
+3. An initial playlist will be created with all the songs in the storage. You can modify the playlist.
 4. Customize visualization mode, volume, and timer.
 5. Enjoy the music player!
 
