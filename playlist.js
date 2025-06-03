@@ -1,32 +1,36 @@
-var audio = document.getElementById("audio");
-var songTitle = document.getElementById("song-title");
-var currentTimeEl = document.getElementById("current-time");
-var durationEl = document.getElementById("duration");
+// === DOM References ===
+const audio = document.getElementById("audio");
+const songTitle = document.getElementById("song-title");
+const currentTimeEl = document.getElementById("current-time");
+const durationEl = document.getElementById("duration");
 
-var playBtn = document.getElementById("play");
-var nextBtn = document.getElementById("next");
-var prevBtn = document.getElementById("prev");
-var shuffleBth = document.getElementById("shuffle");
-var resetBth = document.getElementById("clear");
-var addAll = document.getElementById("add");
+const playBtn = document.getElementById("play");
+const nextBtn = document.getElementById("next");
+const prevBtn = document.getElementById("prev");
+const shuffleBtn = document.getElementById("shuffle");
+const resetBtn = document.getElementById("clear");
+const addAllBtn = document.getElementById("add");
 
-var progressBar = document.getElementById("progress-bar");
-var playlistEl = document.getElementById("playlist");
-var songlistEl = document.getElementById("songlist");
-var volumeSlider = document.getElementById("volume");
+const progressBar = document.getElementById("progress-bar");
+const playlistEl = document.getElementById("playlist");
+const songlistEl = document.getElementById("songlist");
+const volumeSlider = document.getElementById("volume");
 
-var currentIndex = -1;
+let currentIndex = -1;
 
-var initSongs = [
+const initSongs = [
     { title: "Lá Diêu Bông", src: "music/ladieubong.mp3" },
     { title: "Trống cơm", src: "music/trongcom.wav" },
     { title: "Gặp nhau giữa rừng mơ", src: "music/gapnhaugiuarungmo.mp3" },
-    
 ];
-var songs = initSongs.map(song => ({ ...song }));
+
+let songs = initSongs.map(song => ({ ...song }));
+
+// === Core Player Functions ===
+
 function loadSong() {
     if (currentIndex < 0) return;
-    var song = songs[currentIndex];
+    const song = songs[currentIndex];
     audio.src = song.src;
     songTitle.textContent = song.title;
     currentTimeEl.textContent = "0:00";
@@ -40,80 +44,81 @@ function updatePlayBtn() {
         : '<i class="bi bi-pause-fill"></i> Stop';
 }
 
-function highlightActive(index) {
-    if (index < 0) return;
-    var items = playlistEl.querySelectorAll("li");
-    items.forEach((item, i) => {
-        item.classList.toggle("active", i === index);
-    });
-}
-
 function formatTime(seconds) {
-    var m = Math.floor(seconds / 60) || 0;
-    var s = Math.floor(seconds % 60) || 0;
-    return m + ":" + (s < 10 ? "0" : "") + s;
+    const m = Math.floor(seconds / 60) || 0;
+    const s = Math.floor(seconds % 60) || 0;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
 }
 
+function highlightActive(index) {
+    const items = playlistEl.querySelectorAll("li");
+    items.forEach((item, i) =>
+        item.classList.toggle("active", i === index)
+    );
+}
 
-playBtn.addEventListener("click", function () {
+function findIndex(currentSong) {
+    currentIndex = songs.findIndex(song => song.src === currentSong.src);
+}
+
+function shuffleArray(arr) {
+    return arr
+        .map(item => ({ item, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ item }) => item);
+}
+
+// === Event Handlers ===
+
+playBtn.addEventListener("click", () => {
     if (currentIndex < 0) return;
-    if (audio.paused) {
-        audio.play();
-    } else {
-        audio.pause();
-    }
+    audio.paused ? audio.play() : audio.pause();
     updatePlayBtn();
 });
 
-nextBtn.addEventListener("click", function () {
-    playNext();
-});
+nextBtn.addEventListener("click", playNext);
 
-prevBtn.addEventListener("click", function () {
+prevBtn.addEventListener("click", () => {
     currentIndex = (currentIndex - 1 + songs.length) % songs.length;
     loadSong();
     audio.play();
     updatePlayBtn();
 });
 
-audio.addEventListener("loadedmetadata", function () {
+audio.addEventListener("loadedmetadata", () => {
     durationEl.textContent = formatTime(audio.duration);
 });
 
-audio.addEventListener("timeupdate", function () {
+audio.addEventListener("timeupdate", () => {
     currentTimeEl.textContent = formatTime(audio.currentTime);
-    var percent = (audio.currentTime / audio.duration) * 100 || 0;
+    const percent = (audio.currentTime / audio.duration) * 100 || 0;
     progressBar.value = percent;
     if (typeof updateSlider === "function") updateSlider(progressBar);
 });
 
-progressBar.addEventListener("input", function () {
+progressBar.addEventListener("input", () => {
     audio.currentTime = (progressBar.value / 100) * audio.duration;
 });
 
-volumeSlider.addEventListener("input", function () {
+volumeSlider.addEventListener("input", () => {
     audio.volume = volumeSlider.value;
 });
 
-
-audio.addEventListener("ended", function () {
-    playNext();
-});
+audio.addEventListener("ended", playNext);
 
 function playNext() {
-    currentIndex++;
-    if (currentIndex >= songs.length) {
-        currentIndex = 0;
-    }
+    currentIndex = (currentIndex + 1) % songs.length;
     loadSong();
     audio.play();
     updatePlayBtn();
 }
 
+// === Playlist UI Rendering ===
+
 function renderPlaylist() {
     playlistEl.innerHTML = "";
 
-    songs.forEach(function (song, index) {
+    songs.forEach((song, index) => {
         const li = document.createElement("li");
         li.className = "list-group-item d-flex justify-content-between align-items-center gap-3";
 
@@ -125,8 +130,7 @@ function renderPlaylist() {
             </button>
         `;
 
-        // Play song on click (excluding the remove button)
-        li.addEventListener("click", function (e) {
+        li.addEventListener("click", e => {
             if (!e.target.closest(".remove-btn")) {
                 currentIndex = index;
                 loadSong();
@@ -135,11 +139,10 @@ function renderPlaylist() {
             }
         });
 
-        li.querySelector(".remove-btn").addEventListener("click", function (e) {
+        li.querySelector(".remove-btn").addEventListener("click", e => {
             e.stopPropagation();
-
             songs.splice(index, 1);
-            console.log(songs)
+
             if (index === currentIndex) {
                 currentIndex = Math.min(currentIndex, songs.length - 1);
                 loadSong();
@@ -167,15 +170,15 @@ function renderPlaylist() {
     new Sortable(playlistEl, {
         handle: ".drag-handle",
         animation: 150,
-        onEnd: function (evt) {
-            const movedItem = songs.splice(evt.oldIndex, 1)[0];
-            songs.splice(evt.newIndex, 0, movedItem);
+        onEnd: ({ oldIndex, newIndex }) => {
+            const movedItem = songs.splice(oldIndex, 1)[0];
+            songs.splice(newIndex, 0, movedItem);
 
-            if (currentIndex === evt.oldIndex) {
-                currentIndex = evt.newIndex;
-            } else if (evt.oldIndex < currentIndex && evt.newIndex >= currentIndex) {
+            if (currentIndex === oldIndex) {
+                currentIndex = newIndex;
+            } else if (oldIndex < currentIndex && newIndex >= currentIndex) {
                 currentIndex--;
-            } else if (evt.oldIndex > currentIndex && evt.newIndex <= currentIndex) {
+            } else if (oldIndex > currentIndex && newIndex <= currentIndex) {
                 currentIndex++;
             }
 
@@ -185,15 +188,14 @@ function renderPlaylist() {
     });
 }
 
-
 function renderSonglist() {
     songlistEl.innerHTML = "";
-    initSongs.forEach(function (song, index) {
+
+    initSongs.forEach(song => {
+        const isInPlaylist = songs.some(s => s.src === song.src);
+
         const li = document.createElement("li");
         li.className = "list-group-item d-flex justify-content-between align-items-center gap-3";
-
-        // Check if song is already in playlist
-        const isInPlaylist = songs.some(s => s.src === song.src);
 
         li.innerHTML = `
             <span class="flex-grow-1">${song.title}</span>
@@ -203,12 +205,12 @@ function renderSonglist() {
         `;
 
         if (!isInPlaylist) {
-            li.querySelector(".add-btn").addEventListener("click", function (e) {
+            li.querySelector(".add-btn").addEventListener("click", e => {
                 e.stopPropagation();
                 songs.push(song);
-                renderPlaylist();     // Refresh the playlist UI
+                renderPlaylist();
                 highlightActive(currentIndex);
-                renderSonglist();     // Refresh the song list to disable the button
+                renderSonglist();
             });
         }
 
@@ -216,29 +218,18 @@ function renderSonglist() {
     });
 }
 
-function shuffleArray(arr) {
-    return arr
-        .map((item) => ({ item, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ item }) => item);
-}
+// === Control Buttons ===
 
-function findIndex(currentSong){
-    currentIndex = songs.findIndex(
-        (song) => song.src === currentSong.src
-    );
-}
-shuffleBth.addEventListener("click", () => {
+shuffleBtn.addEventListener("click", () => {
     const currentSong = songs[currentIndex];
     songs = shuffleArray(songs);
     findIndex(currentSong);
     renderPlaylist();
-    highlightActive(currentIndex)
-
+    highlightActive(currentIndex);
 });
 
-resetBth.addEventListener("click", () => {
-    songs = []
+resetBtn.addEventListener("click", () => {
+    songs = [];
     audio.pause();
     currentIndex = -1;
     audio.src = "";
@@ -248,17 +239,15 @@ resetBth.addEventListener("click", () => {
     renderSonglist();
 });
 
-addAll.addEventListener("click", () => {
-    const currentSong = songs[currentIndex];   
+addAllBtn.addEventListener("click", () => {
+    const currentSong = songs[currentIndex];
     songs = initSongs.map(song => ({ ...song }));
-    if (currentIndex >= 0) {
-        findIndex(currentSong);
-    }
+    if (currentIndex >= 0) findIndex(currentSong);
     renderPlaylist();
     renderSonglist();
     highlightActive(currentIndex);
 });
 
-
+// === Initial Render ===
 renderSonglist();
 renderPlaylist();
