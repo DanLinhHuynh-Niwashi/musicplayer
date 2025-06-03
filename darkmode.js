@@ -10,13 +10,15 @@ if (savedMode === 'enabled') {
 }
 
 toggle.addEventListener('change', () => {
-    if (toggle.checked) {
-        document.body.classList.add('dark-mode');
-        localStorage.setItem('darkMode', 'enabled');
-    } else {
-        document.body.classList.remove('dark-mode');
-        localStorage.setItem('darkMode', 'disabled');
-    }
+    requestAnimationFrame(() => {
+        if (toggle.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'disabled');
+        }
 
-    sliders.forEach(slider => updateSlider(slider));
+        sliders.forEach(slider => updateSlider(slider));
+    });
 });

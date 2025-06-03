@@ -21,7 +21,9 @@ body.dark-mode {
 
     --slider-bg: #2c2c2c;
 }
-
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 body,
 html {
     margin: 0;
